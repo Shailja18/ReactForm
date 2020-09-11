@@ -27,7 +27,7 @@ export default class Form extends Component
                       country:'',phonenumber1:'',phonenumber2:'', emailid:'', propertyaddress:'',
                       noofFloors:'', noofRooms:'', twosharing:'',threesharing:'', foursharing:'',
                       onesharingvacant:'',twosharingvacant:'',threesharingvacant:'',foursharingvacant:'',
-                      fivesharingvacant:'',propertylandmark:'', propertyimage:'',ac:'',wifi:'',washingmachine:'',
+                      fivesharingvacant:'',onesharingrent:'',twosharingrent:'',threesharingrent:'',deposit:'',propertylandmark:'',hospital:'',institute:'',market:'',heartofcity:'', propertyimage:'',ac:'',wifi:'',washingmachine:'',
                       fridge:'',tv:'',elevator:'',kitchen:'',geyser:'',powerbackup:'',parking:'',
                       heater:'',cctv:'',payment:'',table:'',chair:'',cot:'', mattress:'',pillow:'',
                       cupboard:''
@@ -37,22 +37,40 @@ export default class Form extends Component
       this.submithandler=this.submithandler.bind(this);
      this.handleAmentiesChange=this.handleAmentiesChange.bind(this);
      this.changedropdown=this.changedropdown.bind(this);
+     this.appendfile=this.appendfile.bind(this);
      // this.changehandler=this.changehandler.bind(this);       
     }
     
+     getBase64(file) {
+      var reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onloadend = () =>{
+        //this.state.propertyimage=reader.result;
+        this.setState({
+          propertyimage: file,
+          base64: reader.result
+        });
+       // console.log("let   see  ",this.state.propertyimage);
+      };
+      reader.onerror = function (error) {
+        console.log('Error: ', error);
+      };
+   }
     appendfile=(e) =>{
-      let images=[];
-      for(var i=0;i<e.target.files.length;i++)
-      {
-        images[i]=e.target.files.item(i);
-      }
-  //   this.setState({ [e.target.name]: e.target.files[0] });
-      console.log("  ");
-      this.setState({
-        [e.target.name]: e.target.value
-      });
-      
 
+  //   this.setState({ [e.target.name]: e.target.files[0] });
+     // let data;
+      let file=e.target.files[0];
+      this.getBase64(file)
+    //  console.log("data --- ",file);
+    //  this.getBase64(file)
+    //  this.setState({
+    
+    //  [e.target.name]:e.target.files[0]
+   //    propertyimage: this.getBase64(file)
+   //   });
+      
+    console.log("------------set state image" ,this.state.propertyimage)
      // this.state.propertyimage=e.target.files.item(0);
      // console.log(this.state.propertyimage);
     }
@@ -80,6 +98,9 @@ export default class Form extends Component
     };
      submithandler =(e) =>{
            e.preventDefault();
+           let formdata=new FormData();
+           formdata.append('propertyimage',this.state.propertyimage);
+           formdata.append('Desc',"Hwllo World");
            const companydetails=
            {
             companyname:this.state.companyname,
@@ -126,36 +147,37 @@ export default class Form extends Component
                                                  fourSharingVacant:this.state.foursharingvacant,
                                                  fiveSharingVacant:this.state.fivesharingvacant,
                                                  sixSharingVacant:"",
-                                                 oneSharingRent:"",
-                                                 doubleSharingRent:"",
-                                                 tripleSharingRent:""
+                                                 oneSharingRent:this.state.onesharingrent,
+                                                 doubleSharingRent:this.state.twosharingrent,
+                                                 tripleSharingRent:this.state.threesharingrent,
+                                                 deposit:this.state.deposit
                                                   },
                                     PropertyImage:{
                                                    propertyImageOne:this.state.propertyimage,
-                                                   propertyImageTwo:"",
-                                                   propertyImageThree:"",
-                                                   propertyImageFour:"",
-                                                   propertyImageFive:"",
-                                                   propertyImageSix:" ",
-                                                   propertyImageSeven:"",
-                                                   propertyImageEight:"",
-                                                   propertyImageNine:"",
-                                                   propertyImageTen:"",
-                                                   propertyImageEleven:"",
-                                                   propertyImageTwelve:""
+                                                //   propertyImageTwo:"",
+                                                //   propertyImageThree:"",
+                                                //   propertyImageFour:"",
+                                                 //  propertyImageFive:"",
+                                                //   propertyImageSix:" ",
+                                                //   propertyImageSeven:"",
+                                              //  propertyImageEight:"",
+                                                //   propertyImageNine:"",
+                                                 //  propertyImageTen:"",
+                                                //   propertyImageEleven:"",
+                                               //    propertyImageTwelve:""
                                                 },
                               PropertyLandmarks:{
-                                                 Hospital:"",
-                                                 School:"",
+                                                 Hospital:this.state.hospital,
+                                                 Institute:this.state.institute,
                                                  ITPark:"",
-                                                 superMarket:"",
+                                                 Market:this.state.market,
                                                  railwayStation:"",
                                                  busStop:"",
                                                  eduInstitute:"",
                                                  college:"",
                                                  medicalStore:"",
                                                  airport:"",
-                                                 heartofTheCity:"",
+                                                 heartofTheCity:this.state.heartofcity,
                                                  autoStand:"",
                                                   vegetableShop:""
                                                 }
@@ -168,6 +190,8 @@ export default class Form extends Component
               washingmachine:this.state.washingmachine,
               freeze:this.state.fridge,
               tv:this.state.tv,
+              mess_veg:this.state.mess_veg,
+              mess_nonveg:this.state.mess_nonveg,
               Elevator: this.state.elevator,
               Kitchen:this.state.kitchen,
               Geyser:this.state.geyser,
@@ -181,8 +205,8 @@ export default class Form extends Component
               Cot:this.state.cot,
               Mattress:this.state.mattress,
               Pillow:this.state.pillow,
-              Cupboard:this.state.cupboard
-             
+              Cupboard:this.state.cupboard,
+             propertyimage:this.state.propertyimage
             }
 
 
@@ -190,9 +214,19 @@ export default class Form extends Component
             //optio:this.state.optio
               
            
-        //        
-        axios.post(`https://jsonplaceholder.typicode.com/users`,{companydetails})
-        .then(res => {
+        /*  
+        {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }    
+        
+        */
+        axios.post(`https://jsonplaceholder.typicode.com/users`,{companydetails} 
+        
+        
+        )
+         .then(res => {
        //   console.log(res);
           console.log(res.data);
         })
@@ -458,11 +492,47 @@ export default class Form extends Component
              </div>
              <div className="col s5">
 
-             <label>w
+             <label>
              Five Sharing Vacant
             <input type="text" style={{border:'solid',borderStyle:"groove" ,color:'grey'}} name="fivesharingvacant"  onChange={this.changehandler}/>
             </label>
             </div>
+            </div>
+            {/* Row ended */}
+            <div className="row">
+           
+            <div className="col s5">
+            <label>
+             One Sharing Rent 
+            <input type="text" style={{border:'solid',borderStyle:"groove" ,color:'grey'}} name="onesharingrent"  onChange={this.changehandler}/>
+             </label>
+             
+             </div>
+             <div className="col s5">
+
+             <label>
+             Two Sharing Rent
+            <input type="text" style={{border:'solid',borderStyle:"groove" ,color:'grey'}} name="twosharingrent"  onChange={this.changehandler}/>
+            </label>
+            </div>
+            </div>
+            {/* Row ended */}
+            <div className="row">
+            
+            <div className="col s5">
+            <label>
+             Three Sharing Rent
+            <input type="text" style={{border:'solid',borderStyle:"groove" ,color:'grey'}} name="threesharingrent"  onChange={this.changehandler}/>
+            </label>
+            </div>
+            <div className="col s5">
+            <label>
+             Deposit
+            <input type="text" style={{border:'solid',borderStyle:"groove" ,color:'grey'}} name="deposit"  onChange={this.changehandler}/>
+            </label>
+             
+            </div>
+            
             </div>
             {/* Row ended */}
              {/* Row Started */}
@@ -473,22 +543,58 @@ export default class Form extends Component
              <span>File</span>
             <input type="file" name="propertyimage" accept=".jpg, .jpeg, .png" onChange={this.appendfile} multiple />
             </div>
-           <div className="file-path-wrapper">
-           <input className="file-path validate" type="text" placeholder="Upload one or more files" />
+            <div className="file-path-wrapper">
+            <input className="file-path validate" type="text" placeholder="Upload one or more files" />
             </div>
             
-             </div> 
-              </div>
-              <div className="col s5">
+            </div> 
+            </div>
+             
+            <div className="col s5">
  
               <label>
               Property Landmark
              <input type="text"name="propertylandmark" style={{border:'solid',borderStyle:"groove" ,color:'grey'}} onChange={this.changehandler}/>
              </label>
              
-             </div>
+            </div>
              
              </div>
+             {/* Row ended */}
+             <div className="row">
+           
+             <div className="col s5">
+             <label>
+              Hospital Name
+             <input type="text" style={{border:'solid',borderStyle:"groove" ,color:'grey'}} name="hospital"  onChange={this.changehandler}/>
+              </label>
+              
+              </div>
+              <div className="col s5">
+ 
+              <label>
+              Institute Name
+             <input type="text" style={{border:'solid',borderStyle:"groove" ,color:'grey'}} name="institute"  onChange={this.changehandler}/>
+             </label>
+             </div>
+             </div><div className="row">
+           
+             <div className="col s5">
+             <label>
+              Market Name
+             <input type="text" style={{border:'solid',borderStyle:"groove" ,color:'grey'}} name="market"  onChange={this.changehandler}/>
+              </label>
+              
+              </div>
+              <div className="col s5">
+ 
+              <label>
+              HeartOfCity Name
+             <input type="text" style={{border:'solid',borderStyle:"groove" ,color:'grey'}} name="heartofcity"  onChange={this.changehandler}/>
+             </label>
+             </div>
+             </div>
+
              {/* Row ended */}
               {/* Row Started */}
             <div className="row">
@@ -534,6 +640,21 @@ export default class Form extends Component
          <label>
          <input type="checkbox" name="fridge" onChange={this.handleAmentiesChange}/>
           <span>Fridge</span>
+        </label>
+         </div>
+         </div>
+         <div className="row">
+         <div className="col s6">
+         <label>
+         <input type="checkbox" name="mess_veg" onChange={this.handleAmentiesChange} />
+          <span>Mess-Veg</span>
+        </label>
+         </div>
+            
+         <div className="col s6">
+         <label>
+         <input type="checkbox" name="mess_nonveg" onChange={this.handleAmentiesChange}/>
+          <span>Mess-NonVeg</span>
         </label>
          </div>
          </div>
@@ -647,7 +768,14 @@ export default class Form extends Component
         </label>
          </div>
          </div>
+         <div className="row">
+         <label for="textarea1">Restrictions</label>
+         <div class="input-field col s12">
          
+          <textarea id="textarea1" style={{border:'solid',borderStyle:"groove" ,color:'grey'}} class="materialize-textarea"></textarea>
+         
+        </div>
+         </div>
           <div>
             {/* Row ended */}
             <button type="submit" >Submit</button>
